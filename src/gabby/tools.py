@@ -40,6 +40,7 @@ class ToolErrorCode(StrEnum):
     APPROVAL_UNAVAILABLE = "approval_unavailable"
     DEADLINE_EXCEEDED = "deadline_exceeded"
     SANDBOX_UNAVAILABLE = "sandbox_unavailable"
+    CAPACITY_EXHAUSTED = "capacity_exhausted"
     TOOL_UNAVAILABLE = "tool_unavailable"
     RESULT_TOO_LARGE = "result_too_large"
     INVALID_RESULT = "invalid_result"

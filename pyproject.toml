@@ -1,17 +1,17 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=83"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "gabby-agent-runtime"
-version = "0.1.0"
-description = "A stateless, composable framework for constructing and serving AI agents."
+version = "0.1.0a1"
+description = "A stateless, governed agent execution runtime."
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [{ name = "Gabby Contributors" }]
-keywords = ["agents", "ai", "async", "framework", "llm", "stateless"]
+keywords = ["agents", "ai", "async", "execution-runtime", "llm", "stateless"]
 dependencies = [
   "PyYAML>=6.0",
   "jsonschema>=4.22,<5",
@@ -50,7 +50,7 @@ transformers-adapters = ["peft>=0.19.1,<1"]
 training = ["accelerate>=1,<2", "peft>=0.19.1,<1"]
 windows-sandbox = ["aiohttp>=3.11,<4"]
 observability = ["opentelemetry-api>=1.27,<2", "opentelemetry-sdk>=1.27,<2"]
-skill-signing = ["cryptography>=44,<51"]
+skill-signing = ["cryptography>=50,<51"]
 mcp = ["mcp>=2.0.0,<3"]
 postgres = ["asyncpg>=0.31,<1"]
 
@@ -64,7 +64,7 @@ dev = [
   "build>=1.2,<2",
   "pip-audit>=2.10,<3",
   "pypdf>=6.19,<7",
-  "uv==0.12.13",
+  "uv==0.12.23",
 ]
 
 [tool.pytest.ini_options]

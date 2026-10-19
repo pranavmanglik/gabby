@@ -11,7 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Gabby: construct and execute stateless, composable agents."""
+"""Build and execute specialized, stateless AI agents.
+
+Gabby composes a model with an environment, reusable skills, registered tools, optional
+knowledge retrieval, instructions, runtime-enforced policies, and verification. The same
+resolved definition can be run directly with :class:`Agent` or exposed through the FastAPI
+service factory :func:`create_app`.
+
+Each run receives its task and any caller-owned context explicitly. Gabby keeps transient
+planning and tool observations only for that execution; it does not persist conversations or
+user memory. Applications decide what state to retain and pass it to a later run.
+
+The package root exports the supported entry points for the current pre-1.0 release. Public
+extension contracts may evolve before 1.0; see the extension policy and guides in the project
+documentation before depending on an extension interface.
+"""
 
 from .agent import Agent
 from .approval import ApprovalAuditSink, ApprovalDecision, ApprovalHandler, ApprovalRequest
@@ -488,4 +502,4 @@ __all__ = [
     "load_evaluation_dataset",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.1.0a1"

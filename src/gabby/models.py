@@ -19,6 +19,7 @@ import asyncio
 import json
 import math
 import os
+import queue
 import re
 import threading
 import uuid
@@ -40,6 +41,7 @@ from .config import (
 )
 
 _MAX_TOOL_RESPONSE_TEMPLATE_BYTES = 64 * 1024
+_TRANSFORMERS_STREAM_END = object()
 
 
 @dataclass
@@ -1740,6 +1742,119 @@ class TransformersProvider:
                 stop_event.set()
                 raise
 
+    async def stream(
+        self,
+        *,
+        messages: list[dict[str, Any]],
+        tools: list[dict[str, Any]],
+        model: str,
+        temperature: float | None = None,
+        timeout_seconds: float = 120,
+    ) -> AsyncIterator[ModelStreamDelta]:
+        """Stream local text as it is generated and preserve tool calls when tools are enabled.
+
+        Transformers chat templates may encode tool calls in model-specific control tokens.
+        When tools are available, buffer the completion and use the normal parser so those tokens
+        are never exposed as user-facing text. Tool-free prompts use a bounded text streamer.
+        """
+        if tools:
+            response = await self.complete(
+                messages=messages,
+                tools=tools,
+                model=model,
+                temperature=temperature,
+                timeout_seconds=timeout_seconds,
+            )
+            if response.content:
+                yield ModelStreamDelta(content_delta=response.content)
+            for index, call in enumerate(response.tool_calls):
+                function = call.get("function") if isinstance(call, dict) else None
+                if not isinstance(function, dict):
+                    raise ModelError("Local Transformers model returned a malformed tool call")
+                yield ModelStreamDelta(
+                    tool_call_index=index,
+                    tool_call_id=call.get("id") if isinstance(call.get("id"), str) else None,
+                    tool_name_delta=(
+                        function.get("name") if isinstance(function.get("name"), str) else None
+                    ),
+                    tool_arguments_delta=(
+                        function.get("arguments")
+                        if isinstance(function.get("arguments"), str)
+                        else None
+                    ),
+                )
+            yield ModelStreamDelta(
+                usage=response.usage,
+                finish_reason="tool_calls" if response.tool_calls else "stop",
+            )
+            return
+
+        if (
+            isinstance(timeout_seconds, bool)
+            or not isinstance(timeout_seconds, (int, float))
+            or not math.isfinite(timeout_seconds)
+            or timeout_seconds <= 0
+        ):
+            raise ValueError("timeout_seconds must be a finite positive number")
+        stop_event = threading.Event()
+        async with self._call_lock:
+            text_queue: queue.Queue[Any] = queue.Queue(maxsize=64)
+            producer = asyncio.create_task(
+                run_sync_callback(
+                    self._complete_sync,
+                    messages,
+                    [],
+                    model,
+                    temperature,
+                    DEFAULT_MAX_MODEL_RESPONSE_BYTES,
+                    stop_event,
+                    text_queue,
+                )
+            )
+            total_bytes = 0
+            try:
+                async with asyncio.timeout(timeout_seconds):
+                    while True:
+                        try:
+                            chunk = text_queue.get_nowait()
+                        except queue.Empty:
+                            if producer.done():
+                                break
+                            await asyncio.sleep(0.01)
+                            continue
+                        if chunk is _TRANSFORMERS_STREAM_END:
+                            break
+                        if not isinstance(chunk, str):
+                            raise ModelError("Local Transformers streamer returned invalid text")
+                        total_bytes += len(chunk.encode("utf-8"))
+                        if total_bytes > DEFAULT_MAX_MODEL_RESPONSE_BYTES:
+                            stop_event.set()
+                            raise ModelResponseSizeError(
+                                "Local model response exceeded the configured byte limit"
+                            )
+                        if chunk:
+                            yield ModelStreamDelta(content_delta=chunk)
+                    response = await producer
+                    if not isinstance(response, ModelResponse):
+                        raise ModelError("Local model worker returned an invalid response")
+                    yield ModelStreamDelta(usage=response.usage, finish_reason="stop")
+            except TimeoutError:
+                stop_event.set()
+                producer.cancel()
+                raise ModelError("Local Transformers generation exceeded its timeout") from None
+            except asyncio.CancelledError:
+                stop_event.set()
+                producer.cancel()
+                raise
+            except GeneratorExit:
+                stop_event.set()
+                producer.cancel()
+                raise
+            except Exception:
+                stop_event.set()
+                producer.cancel()
+                raise
+
     def _complete_sync(
         self,
         messages: list[dict[str, Any]],
@@ -1748,6 +1863,7 @@ class TransformersProvider:
         temperature: float | None,
         max_response_bytes: int,
         stop_event: threading.Event,
+        stream_queue: queue.Queue[Any] | None = None,
     ) -> ModelResponse:
         """Load and run the model synchronously while serializing access to its weights."""
         with self._generation_lock:
@@ -1799,6 +1915,37 @@ class TransformersProvider:
                 }
                 if temperature is not None and temperature > 0:
                     generation_options["temperature"] = temperature
+                if stream_queue is not None:
+                    text_output_queue = stream_queue
+                    try:
+                        from transformers import TextIteratorStreamer
+                    except ImportError:
+                        raise ModelError(
+                            "Install Gabby's optional 'transformers' dependencies to stream"
+                        ) from None
+
+                    class BoundedTextStreamer(TextIteratorStreamer):
+                        """TextIteratorStreamer with bounded buffering and cooperative cancel."""
+
+                        def __init__(self) -> None:
+                            super().__init__(tokenizer, skip_prompt=True, skip_special_tokens=True)
+
+                        def on_finalized_text(self, text: str, stream_end: bool = False) -> None:
+                            if text:
+                                self._put(text)
+                            if stream_end:
+                                self._put(_TRANSFORMERS_STREAM_END)
+
+                        def _put(self, value: Any) -> None:
+                            while not stop_event.is_set():
+                                try:
+                                    text_output_queue.put(value, timeout=0.05)
+                                    return
+                                except queue.Full:
+                                    continue
+
+                    streamer = BoundedTextStreamer()
+                    generation_options["streamer"] = streamer
                 with torch.inference_mode():
                     generated = model.generate(**inputs, **generation_options)
                 generated_ids = generated[0][input_count:]

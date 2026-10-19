@@ -115,8 +115,15 @@ def markdown_errors(path: Path) -> list[str]:
     """Find missing document headings, unbalanced fences, and broken local links."""
     lines = path.read_text(encoding="utf-8").splitlines()
     errors: list[str] = []
-    first = next((line.strip() for line in lines if line.strip()), "")
-    if not first.startswith("# "):
+    content_lines = [line.strip() for line in lines if line.strip()]
+    first = content_lines[0] if content_lines else ""
+    starts_with_h1 = first.startswith("# ") or (
+        path == ROOT / "README.md"
+        and first == '<div align="center">'
+        and len(content_lines) > 1
+        and content_lines[1].startswith("# ")
+    )
+    if not starts_with_h1:
         errors.append(f"{path}: document must begin with an H1 heading")
     if sum(line.strip().startswith("```") for line in lines) % 2:
         errors.append(f"{path}: unmatched fenced code block")
