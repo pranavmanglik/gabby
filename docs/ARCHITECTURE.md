@@ -1,12 +1,25 @@
-# Gabby Architecture
+# Gabby Stateless Agent Execution Runtime
 
 **Status:** living architecture document for the pre-1.0 implementation. Accepted decisions and known limitations are recorded in the ADRs, roadmap, and [project scorecard](PROJECT_SCORECARD.md). Public extension contracts may change before v1.0; see [the extension API policy](EXTENSIONS.md).
 
 ## Product boundary
 
+Gabby is a stateless agent execution runtime. Its responsibility is to execute a configured agent
+request within explicit runtime contracts and return a result; it is not the owner of the consumer's
+conversation lifecycle or persistent user state.
+
 Gabby constructs and executes reusable agent capabilities. It does not own a user's conversation, project history, or durable memory. A caller sends one request with whatever context it wants the agent to see. Gabby returns a result and optional trace; request-local state is discarded when execution ends.
 
 Runtime composition is specialization: model choice, instructions, environment, skills, tools, knowledge, and policies. It does not imply model-weight training. Fine-tuning is a separate optional subsystem.
+
+The product direction is agent engineering: behavior, capabilities, policies, and specialization
+methods should be explicit design choices that developers can evaluate and change. In this alpha,
+behavior is mainly expressed through runtime/global/agent/skill/task instructions, skill procedures,
+planner and selector choices, and enforced policies. Gabby does not yet provide a dedicated
+personality or working-style profile, nor a first-class experiment/phase manager that branches,
+promotes, and discards versioned agent-development artifacts. Treat those as product direction, not
+implemented alpha contracts. A container isolates execution; it does not by itself make agent
+development reproducible or reversible.
 
 ## Proposed component model
 

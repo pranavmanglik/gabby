@@ -27,7 +27,7 @@ from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any, Literal, cast
 
-from ._sync import run_sync_callback
+from ._sync import SyncCallbackOverloaded, run_sync_callback
 from .approval import ApprovalDecision, ApprovalHandler, ApprovalRequest
 from .auth import Principal
 from .config import (
@@ -1674,6 +1674,8 @@ class Runtime:
                             raise ToolError(
                                 "Tool execution timed out", code=ToolErrorCode.DEADLINE_EXCEEDED
                             ) from exc
+                        except SyncCallbackOverloaded:
+                            raise _ToolHandlerFailure(ToolErrorCode.CAPACITY_EXHAUSTED) from None
                         except ToolError as exc:
                             raise _ToolHandlerFailure(exc.code) from None
                         except Exception:

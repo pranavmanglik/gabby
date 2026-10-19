@@ -3,6 +3,22 @@
 This roadmap separates current implementation from work needed before Gabby can make stronger
 production claims. Dates are omitted; each step depends on reviewable behavior and evidence.
 
+## Agent engineering direction
+
+Gabby's product direction is to make an agent's behavior and construction lifecycle explicit and
+revisable. The current alpha supplies behavioral controls through instructions, skills, planners,
+selectors, tools, and runtime-enforced policies. It does not yet define a dedicated personality or
+working-style schema. It also does not own an experiment lifecycle that versions a build phase and
+its artifacts, evaluates it, then promotes, branches, or discards it without disturbing a known-good
+release.
+
+Future local feature work should treat these as separate contracts: behavioral profiles that compile
+to explicit instructions and preferences, and versioned development phases that snapshot config,
+dependencies, artifact references, and evaluation evidence. Containers or temporary workspaces can
+isolate a phase, while immutable manifests and separately managed knowledge/model artifacts make
+the result reproducible and reversible. These are roadmap capabilities and must not be implied by
+the current runtime's stateless execution or sandbox support.
+
 ## Current foundation
 
 - Python core, async-first stateless runtime, and synchronous wrapper.

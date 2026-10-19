@@ -254,6 +254,22 @@ compatible endpoint. It can incur API usage charges. Keep `ANTHROPIC_API_KEY` in
 protected environment injection and out of shell history. See Anthropic's
 [Messages API reference](https://docs.anthropic.com/en/api/messages).
 
+## Google Gemini
+
+Set a Gemini API key through the host environment and choose a model available to the account:
+
+```sh
+GABBY_RUN_GEMINI_INTEGRATION=1 \
+GABBY_GEMINI_MODEL=your-enabled-model-id \
+uv run --frozen pytest tests/integration/test_model_providers_live.py -k gemini -q
+```
+
+The check performs one completion and one streamed completion against the native Gemini
+GenerateContent API. The default endpoint is Google's `v1beta` API; set `GABBY_GEMINI_BASE_URL` only
+for an approved compatible endpoint. It can incur API usage charges. Keep `GEMINI_API_KEY` in a
+secret manager or protected environment injection and out of shell history. Model and API
+availability depends on the account and selected model.
+
 ## Local Hugging Face Transformers
 
 Install Gabby's `transformers` extra and a PyTorch 2.5+ build appropriate for the host's CPU or
@@ -272,8 +288,10 @@ uv run --frozen pytest tests/integration/test_model_providers_live.py -k local_t
 Set `GABBY_TRANSFORMERS_DEVICE` to a supported PyTorch device such as `cuda` or `mps` when that
 runtime is installed. `GABBY_TRANSFORMERS_REVISION` optionally pins a Hub commit. The acceptance
 uses no tools and makes no claim about tool-template support, throughput, model quality, or
-accelerator isolation; run a separate reviewed test with the selected model before relying on its
-structured tool-call parser.
+accelerator isolation. It verifies normal completion and incremental SSE text for a tool-free call.
+Tool-enabled local calls buffer each provider response for model-specific tool parsing, so they do
+not yet provide token-by-token text. Run a separate reviewed test with the selected model before
+relying on its structured tool-call parser.
 
 ### Structured local tool-call parsing
 

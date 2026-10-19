@@ -356,6 +356,7 @@ async def test_gemini_query_rejects_a_non_string_prefix() -> None:
 async def test_embedding_adapters_reject_values_that_overflow_float(
     monkeypatch: pytest.MonkeyPatch, provider_kind: str, message: str
 ) -> None:
+    provider: Any
     if provider_kind == "openai":
         provider = _provider(
             lambda _: httpx.Response(200, json={"data": [{"index": 0, "embedding": [10**400]}]}),

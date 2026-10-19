@@ -340,13 +340,13 @@ def test_load_sft_dataset_sanitizes_open_race_and_read_errors(
     def changed_file(_descriptor: int) -> Any:
         return SimpleNamespace(st_mode=0o100600, st_dev=1, st_ino=2)
 
-    monkeypatch.setattr(training_module.os, "fstat", changed_file)
+    monkeypatch.setattr(os, "fstat", changed_file)
     with pytest.raises(ConfigError, match="changed while"):
         load_sft_dataset(dataset)
 
     monkeypatch.undo()
     monkeypatch.setattr(
-        training_module.os,
+        os,
         "open",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(OSError("private path detail")),
     )
@@ -375,7 +375,7 @@ def test_load_sft_dataset_sanitizes_read_failures(
         os.close(descriptor)
         return FailedStream()
 
-    monkeypatch.setattr(training_module.os, "fdopen", failed_fdopen)
+    monkeypatch.setattr(os, "fdopen", failed_fdopen)
     with pytest.raises(ConfigError, match="could not be read") as failure:
         load_sft_dataset(dataset)
     assert "private read detail" not in str(failure.value)

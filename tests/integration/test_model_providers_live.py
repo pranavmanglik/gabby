@@ -34,6 +34,7 @@ from gabby.models import TransformersProvider
         ("ollama", "GABBY_RUN_OLLAMA_INTEGRATION", "GABBY_OLLAMA_MODEL"),
         ("huggingface", "GABBY_RUN_HUGGINGFACE_INTEGRATION", "GABBY_HUGGINGFACE_MODEL"),
         ("anthropic", "GABBY_RUN_ANTHROPIC_INTEGRATION", "GABBY_ANTHROPIC_MODEL"),
+        ("gemini", "GABBY_RUN_GEMINI_INTEGRATION", "GABBY_GEMINI_MODEL"),
     ],
 )
 async def test_live_model_provider_completion_and_stream(
@@ -48,12 +49,15 @@ async def test_live_model_provider_completion_and_stream(
         pytest.fail("set HF_TOKEN in the environment before calling Hugging Face")
     if provider == "anthropic" and not os.environ.get("ANTHROPIC_API_KEY"):
         pytest.fail("set ANTHROPIC_API_KEY in the environment before calling Anthropic")
+    if provider == "gemini" and not os.environ.get("GEMINI_API_KEY"):
+        pytest.fail("set GEMINI_API_KEY in the environment before calling Gemini")
 
     model: dict[str, Any] = {"provider": provider, "model": model_id}
     endpoint_env = {
         "ollama": "GABBY_OLLAMA_BASE_URL",
         "huggingface": "GABBY_HUGGINGFACE_BASE_URL",
         "anthropic": "GABBY_ANTHROPIC_BASE_URL",
+        "gemini": "GABBY_GEMINI_BASE_URL",
     }[provider]
     if base_url := os.environ.get(endpoint_env):
         model["base_url"] = base_url
@@ -123,6 +127,18 @@ async def test_live_local_transformers_model_completion() -> None:
     try:
         result = await agent.arun("Reply with a short greeting.")
         assert result.output.strip(), "local Transformers model returned an empty completion"
+        events = [event async for event in agent.astream("Reply with a short greeting.")]
+        deltas = [
+            event.data.get("text")
+            for event in events
+            if event.type == "text_delta" and isinstance(event.data.get("text"), str)
+        ]
+        assert any(isinstance(delta, str) and delta.strip() for delta in deltas), (
+            "local Transformers stream emitted no incremental text"
+        )
+        assert any(event.type == "completed" for event in events), (
+            "local Transformers stream did not complete"
+        )
     finally:
         await agent.aclose()
 

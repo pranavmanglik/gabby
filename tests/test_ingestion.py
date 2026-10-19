@@ -22,6 +22,7 @@ import zlib
 from io import BytesIO
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
+from typing import Any, cast
 
 import pytest
 
@@ -3762,7 +3763,7 @@ async def test_file_ingestor_enforces_custom_parser_output_contracts(
         SQLiteFTS5Store(tmp_path / "knowledge.db"),
         root,
         parsers=(Parser(),),  # type: ignore[arg-type]
-        **options,
+        **cast(Any, options),
     )
 
     with pytest.raises(error, match=message):
@@ -3781,8 +3782,8 @@ async def test_file_ingestor_rejects_invalid_chunks_from_custom_chunker(
             return (ParsedPage("content"),)
 
     class EmptyChunker:
-        def chunk(self, _text: str) -> tuple[object, ...]:
-            return chunks
+        def chunk(self, _text: str) -> tuple[str, ...]:
+            return cast(tuple[str, ...], chunks)
 
     root = tmp_path / "docs"
     root.mkdir()

@@ -167,6 +167,81 @@ async def test_transformers_provider_completes_off_loop_with_bounded_generation(
 
 
 @pytest.mark.asyncio
+async def test_transformers_provider_streams_tool_free_text_incrementally(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class FakeTextIteratorStreamer:
+        def __init__(self, tokenizer: _Tokenizer, **kwargs: Any) -> None:
+            assert kwargs == {"skip_prompt": True, "skip_special_tokens": True}
+            self.tokenizer = tokenizer
+
+    transformers = ModuleType("transformers")
+    transformers.TextIteratorStreamer = FakeTextIteratorStreamer  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "transformers", transformers)
+
+    class StreamingModel(_Model):
+        def generate(self, **kwargs: Any) -> _Output:
+            streamer = kwargs["streamer"]
+            streamer.on_finalized_text("hello ")
+            streamer.on_finalized_text("world", stream_end=True)
+            return super().generate(**kwargs)
+
+    tokenizer = _Tokenizer()
+    provider = TransformersProvider(model_id="local/test", max_new_tokens=32)
+    provider._load_model = lambda: (  # type: ignore[method-assign]
+        tokenizer,
+        StreamingModel(),
+        _Torch,
+        _StopCriteria,
+    )
+
+    deltas = [
+        delta
+        async for delta in provider.stream(
+            messages=[{"role": "user", "content": "hello"}],
+            tools=[],
+            model="local/test",
+            timeout_seconds=2,
+        )
+    ]
+
+    assert [delta.content_delta for delta in deltas if delta.content_delta] == [
+        "hello ",
+        "world",
+    ]
+    assert deltas[-1].finish_reason == "stop"
+
+
+@pytest.mark.asyncio
+async def test_transformers_provider_buffers_tool_enabled_stream_for_safe_parsing() -> None:
+    tokenizer = _Tokenizer(
+        {"content": None, "tool_calls": [{"name": "sum", "arguments": {"value": 7}}]}
+    )
+    provider = TransformersProvider(model_id="local/test", max_new_tokens=32)
+    provider._load_model = lambda: (tokenizer, _Model(), _Torch, _StopCriteria)  # type: ignore[method-assign]
+    tools = [
+        {
+            "type": "function",
+            "function": {"name": "sum", "description": "Add.", "parameters": {}},
+        }
+    ]
+
+    deltas = [
+        delta
+        async for delta in provider.stream(
+            messages=[{"role": "user", "content": "Call sum."}],
+            tools=tools,
+            model="local/test",
+            timeout_seconds=2,
+        )
+    ]
+
+    assert deltas[0].tool_name_delta == "sum"
+    assert deltas[0].tool_arguments_delta == '{"value": 7}'
+    assert deltas[-1].finish_reason == "tool_calls"
+
+
+@pytest.mark.asyncio
 async def test_transformers_provider_parses_and_normalizes_tool_calls() -> None:
     tokenizer = _Tokenizer(
         {"content": None, "tool_calls": [{"name": "sum", "arguments": {"value": 7}}]}

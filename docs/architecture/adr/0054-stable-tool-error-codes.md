@@ -23,6 +23,8 @@ the `tool_failed` SSE event. Built-in runtime failures map to stable categories.
 raised by a host handler keeps its code, while its message is redacted before it reaches model
 context. Unexpected handler exceptions become `execution_failed` and use a generic model-facing
 message. Existing `error_type` fields remain available as diagnostic compatibility fields.
+Synchronous tool callback pool saturation is reported as `capacity_exhausted` rather than
+`execution_failed`, so callers can distinguish load shedding from handler defects.
 
 ## Consequences
 

@@ -9,6 +9,11 @@ workflow artifact so the PyPI publisher receives only installable distributions.
 receives a separate OIDC token only after those checks pass and the `pypi` GitHub environment
 approves the deployment.
 
+The initial alpha uses the PEP 440 version `0.1.0a1`, which corresponds to the Git tag `v0.1.0a1`.
+This is a Python pre-release; package installers may require consumers to opt in to pre-release
+versions. The final `0.1.0` version is reserved for a later stable release after the alpha
+feedback and compatibility decisions are addressed.
+
 ## One-time repository setup
 
 1. Create a GitHub environment named `pypi` and require maintainer approval before deployment.
@@ -27,7 +32,9 @@ for configuring the external trust relationship.
 1. Update `project.version` in `pyproject.toml` and add the release heading and notes to
    `CHANGELOG.md`.
 2. Merge the release commit into `main` and wait for normal CI to pass.
-3. Create and push the matching annotated tag, such as `v0.1.0`, on that commit.
+3. Create and push the matching annotated tag, such as `v0.1.0a1`, on that commit. Python
+   alpha releases use a PEP 440 pre-release version so installers can distinguish them from a
+   final release and normally require an explicit pre-release opt-in.
 4. The Release workflow repeats platform tests and quality gates for the tagged source, confirms the
    tag is on `main` and matches `project.version`, builds wheel and source distribution files,
    creates signed provenance attestations for both distributions, and generates and attests a

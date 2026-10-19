@@ -129,7 +129,25 @@ def _skill_files_under(base: Path, name: str) -> list[tuple[str | None, Path]]:
 
 
 class Agent:
-    """Resolved stateless agent with owned model resources and injected capabilities."""
+    """A resolved agent that executes stateless requests against configured capabilities.
+
+    Construction validates the definition and snapshots its resolved skills, environment, tools,
+    and policies. Later edits to the source definition or registries do not change this instance;
+    construct another :class:`Agent` to use updated configuration.
+
+    Each call to :meth:`arun`, :meth:`astream`, or :meth:`run` is an independent execution. Pass
+    conversation history or application memory explicitly through ``context`` or ``memory`` when
+    needed. Gabby discards request-local observations after the call and does not save those values.
+
+    A model provider created from the definition is owned and closed by the agent. Providers,
+    tools, retrievers, verifiers, tracers, approval handlers, and sandbox adapters supplied by the
+    host remain host-owned unless a component's contract says otherwise. Use the context-manager
+    interface or call the matching close method so owned provider resources are released.
+
+    The synchronous and asynchronous interfaces cannot be mixed on one instance. Async use and
+    ``aclose`` must stay on the same event loop; sync ``run`` and ``close`` must run outside an
+    active event loop. Prefer async methods in async applications and use sync wrappers for scripts.
+    """
 
     def __init__(
         self,
@@ -467,7 +485,21 @@ class Agent:
 
     @classmethod
     def from_file(cls, path: str | Path, **kwargs: Any) -> Agent:
-        """Load a YAML definition and construct an agent with optional injected services."""
+        """Load, validate, resolve, and snapshot a YAML agent definition.
+
+        Args:
+            path: YAML file containing the agent definition.
+            **kwargs: Host-owned service implementations accepted by :class:`Agent`, such as a
+                model provider, tool registry, retriever, verifier, or tracer.
+
+        Returns:
+            A ready-to-run agent whose definition and registered capabilities are resolved at
+            construction time.
+
+        Raises:
+            ConfigError: If the file is invalid, references unavailable capabilities, or violates
+                a configured policy.
+        """
         return cls(load_agent(path), **kwargs)
 
     def _provider_from_definition(self) -> ModelProvider:
@@ -738,7 +770,27 @@ class Agent:
         metadata: dict[str, Any] | None = None,
         principal: Principal | None = None,
     ) -> ExecutionResult:
-        """Execute one asynchronous run without retaining its request state."""
+        """Execute one request and return its output, metadata, and trace.
+
+        The input, context, memory, metadata, selected skills, model messages, tool observations,
+        and verification result belong to this run. They are not saved for the next call. Supply
+        prior conversation history or external memory explicitly if the model should see it.
+
+        Args:
+            input: Non-empty task text for this execution.
+            context: Optional caller-owned facts or conversation context to include in the request.
+            memory: Optional caller-owned memory supplied for this run; Gabby does not persist it.
+            metadata: Optional caller metadata for extensions and trace correlation.
+            principal: Optional authenticated caller identity for policy and approval extensions.
+
+        Returns:
+            The generated output, structured metadata, and execution trace.
+
+        Raises:
+            AgentRuntimeError: If execution fails due to a runtime, policy, provider, tool, or
+                verification error.
+            RuntimeError: If the agent is closing, closed, or has already selected sync execution.
+        """
         self._begin_async_run()
         try:
             return await self._execute(
@@ -783,7 +835,33 @@ class Agent:
         metadata: dict[str, Any] | None = None,
         principal: Principal | None = None,
     ) -> AsyncGenerator[AgentStreamEvent, None]:
-        """Stream progress and text events while executing one stateless run."""
+        """Yield progress and text events for one independent asynchronous execution.
+
+        Events are delivered in execution order through a bounded in-process queue. Consuming the
+        generator drives the run; closing or cancelling iteration cancels the execution and waits
+        for cleanup. The stream does not create a conversation session or retain events after the
+        generator finishes. Persist events in the consuming application if they are needed later.
+
+        The yielded event types include skill activation, planning, tool and approval progress,
+        text deltas, completion, and sanitized errors. A non-streaming local model may produce its
+        text in a single event after generation completes.
+
+        Args:
+            input: Non-empty task text for this execution.
+            context: Optional caller-owned context included only in this run.
+            memory: Optional caller-owned memory included only in this run.
+            metadata: Optional caller metadata for extensions and trace correlation.
+            principal: Optional authenticated caller identity for policy and approval extensions.
+
+        Yields:
+            Ordered execution events. The final completion event contains the run result metadata
+            and trace identifier.
+
+        Raises:
+            AgentRuntimeError: If execution fails due to a runtime, policy, provider, tool, or
+                verification error.
+            RuntimeError: If the agent is closing, closed, or has already selected sync execution.
+        """
         self._begin_async_run()
         queue: asyncio.Queue[AgentStreamEvent | None] = asyncio.Queue(maxsize=64)
 
@@ -852,7 +930,20 @@ class Agent:
         metadata: dict[str, Any] | None = None,
         principal: Principal | None = None,
     ) -> ExecutionResult:
-        """Synchronous convenience wrapper. Use ``await agent.arun(...)`` in async code."""
+        """Run one stateless request through a persistent synchronous event-loop bridge.
+
+        This wrapper is intended for scripts and synchronous applications. It cannot run inside
+        an active event loop; async applications should use :meth:`arun`. The agent remains in sync
+        mode after the first call, so repeated calls reuse its loop and provider resources until
+        :meth:`close`.
+
+        Arguments and return value match :meth:`arun`. The same state, ownership, and failure
+        semantics apply.
+
+        Raises:
+            RuntimeError: If called from an active event loop, mixed with async use, or after the
+                agent begins closing.
+        """
         if self._closed:
             raise RuntimeError("Agent is closed")
         if self._execution_mode == "async":
@@ -879,7 +970,12 @@ class Agent:
         )
 
     async def aclose(self) -> None:
-        """Drain active asynchronous runs, then close owned resources."""
+        """Stop accepting runs, drain active async executions, and close owned resources.
+
+        Runs already in progress finish within their configured deadlines before an agent-owned
+        provider is closed. Injected providers and other injected components remain host-owned.
+        This method must run on the same event loop as this agent's asynchronous calls.
+        """
         if self._closed:
             return
         runner = self._sync_runner
@@ -906,7 +1002,12 @@ class Agent:
                 await close()
 
     def close(self) -> None:
-        """Close the agent and its persistent synchronous event-loop bridge."""
+        """Close an agent used through the synchronous API and release owned resources.
+
+        The synchronous loop bridge is stopped after an agent-owned provider has been closed. This
+        method cannot run inside an active event loop or after async execution selected the agent's
+        lifecycle; use :meth:`aclose` in async applications.
+        """
         if self._closed:
             return
         try:

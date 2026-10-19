@@ -5,6 +5,24 @@ User-visible changes are recorded here. Before the first release, entries are gr
 
 ## Unreleased
 
+- Added bounded token streaming for tool-free local Transformers generations; tool-enabled
+  generations retain buffered, model-specific tool-call parsing. Synchronous tool-pool saturation
+  now reports the stable `capacity_exhausted` error code.
+- Added opt-in live completion and streaming acceptance coverage for the native Gemini provider.
+- Extended the opt-in local Transformers acceptance check to cover incremental SSE text.
+- Added a scaling and operations guide documenting bounded synchronous callback capacity, vector
+  backend choices, multi-host hybrid indexing, local Transformers streaming boundaries, Windows
+  engine requirements, and safe schema prototyping.
+
+## 0.1.0a1 — 2026-10-10
+
+This is Gabby's first planned public alpha. It is intended for developer evaluation and feedback;
+the public extension API and operational behavior may change before 1.0. The implementation has
+extensive local contract coverage and release automation, but this alpha is not a production
+certification. Review the [threat model](docs/THREAT_MODEL.md), [operations guide](docs/OPERATIONS.md),
+and [project scorecard](docs/PROJECT_SCORECARD.md) before using it with sensitive data or exposing
+it to network traffic.
+
 - Added optional local `gabby train` supervised fine-tuning for PEFT LoRA adapters, with bounded
   assistant-only JSONL data, chat-template mask validation, safetensors output, and a data-digest
   training manifest; `--check-dataset` validates data structure without loading ML dependencies.

@@ -19,7 +19,7 @@ import json
 from copy import deepcopy
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import httpx
 import pytest
@@ -426,9 +426,9 @@ def test_static_registry_builder_rejects_invalid_inputs_and_duplicate_versions(
         )
     with pytest.raises(SkillRegistryError, match="iterable"):
         registry_module.build_static_skill_registry(
-            7,
+            cast(Any, 7),
             tmp_path / "non-iterable",
-            trusted_keys={"publisher": public_key},  # type: ignore[arg-type]
+            trusted_keys={"publisher": public_key},
         )
     with pytest.raises(SkillRegistryError, match="between 1 and"):
         registry_module.build_static_skill_registry(
