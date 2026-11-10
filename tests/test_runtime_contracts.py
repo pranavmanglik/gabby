@@ -237,9 +237,7 @@ async def test_user_scoped_rag_pipeline_applies_persona_and_isolates_retrieved_c
     alice_prompt = "\n".join(
         message.get("content", "") for message in alice_model.calls[0]["messages"]
     )
-    bob_prompt = "\n".join(
-        message.get("content", "") for message in bob_model.calls[0]["messages"]
-    )
+    bob_prompt = "\n".join(message.get("content", "") for message in bob_model.calls[0]["messages"])
     assert "Character: concise and practical." in alice_prompt
     assert "alice prefers concise" in alice_prompt
     assert "bob prefers" not in alice_prompt
