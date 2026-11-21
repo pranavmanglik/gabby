@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # ADR 0034: Add a bounded OpenAI-compatible embeddings adapter
@@ -62,5 +48,5 @@ endpoint, respect its token limits, and verify compatibility for their deploymen
 This is a pre-1.0 public API. Tests cover request batching and byte limits, response streaming and
 limits, response ordering and validation, credential handling, HTTPS policy, and an end-to-end
 hybrid index using the SQLite lexical store, vector store, and generation manifest. See the
-[knowledge guide](../../../README.md#knowledge-retrieval),
+[knowledge guide](https://github.com/undreamt-oss/gabby/blob/main/README.md#knowledge-retrieval),
 [extension guide](../../EXTENSIONS.md), and [threat model](../../THREAT_MODEL.md).

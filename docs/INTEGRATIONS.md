@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # Runtime integrations
@@ -108,7 +94,7 @@ crew_tool = crewai_tool(gabby_client)
 
 `langgraph_node` consumes a string state field and returns the result plus `gabby_trace_id` as a
 state update. `crewai_tool` creates a CrewAI tool using the same remote client. Import
-[`examples/n8n/gabby-http-node.json`](../examples/n8n/gabby-http-node.json) into n8n for a prefilled
+[`examples/n8n/gabby-http-node.json`](https://github.com/undreamt-oss/gabby/blob/main/examples/n8n/gabby-http-node.json) into n8n for a prefilled
 HTTP Request node; it calls `POST /v1/agents/{agent_name}/run`. For SSE, set the node's URL to
 `POST /v1/agents/{agent_name}/stream` and response format to text/event stream. Keep the service URL
 and bearer token in n8n credentials/environment, not the workflow export. `GabbyClient.astream()`

@@ -1,0 +1,52 @@
+;;
+;; Domain:     undreamt.in.
+;; Exported:   2026-11-18 20:28:23
+;;
+;; This file is intended for use for informational and archival
+;; purposes ONLY and MUST be edited before use on a production
+;; DNS server.  In particular, you must:
+;;   -- update the SOA record with the correct authoritative name server
+;;   -- update the SOA record with the contact e-mail address information
+;;   -- update the NS record(s) with the authoritative name servers for this domain.
+;;
+;; For further information, please consult the BIND documentation
+;; located on the following website:
+;;
+;; http://www.isc.org/
+;;
+;; And RFC 1035:
+;;
+;; http://www.ietf.org/rfc/rfc1035.txt
+;;
+;; Please note that we do NOT offer technical support for any use
+;; of this zone data, the BIND name server, or any other third-party
+;; DNS software.
+;;
+;; Use at your own risk.
+;; SOA Record
+undreamt.in	3600	IN	SOA	roman.ns.cloudflare.com. dns.cloudflare.com. 2054670030 10000 2400 604800 3600
+
+;; NS Records
+undreamt.in.	86400	IN	NS	roman.ns.cloudflare.com.
+undreamt.in.	86400	IN	NS	zariyah.ns.cloudflare.com.
+
+;; A Records
+undreamt.in.	1	IN	A	185.199.110.153 ; cf_tags=cf-proxied:false
+undreamt.in.	1	IN	A	185.199.109.153 ; cf_tags=cf-proxied:false
+undreamt.in.	1	IN	A	185.199.111.153 ; cf_tags=cf-proxied:false
+undreamt.in.	1	IN	A	185.199.108.153 ; cf_tags=cf-proxied:false
+
+;; CNAME Records
+www.undreamt.in.	1	IN	CNAME	undreamt-oss.github.io. ; cf_tags=cf-proxied:false
+docs.undreamt.in.	1	IN	CNAME	readthedocs.io. ; cf_tags=cf-proxied:false
+
+;; MX Records
+undreamt.in.	600	IN	MX	10 mx.zoho.in.
+undreamt.in.	600	IN	MX	50 mx3.zoho.in.
+undreamt.in.	600	IN	MX	20 mx2.zoho.in.
+
+;; TXT Records
+_dmarc.undreamt.in.	1	IN	TXT	"v=DMARC1; p=none"
+undreamt.in.	3600	IN	TXT	"v=spf1 include:zohomail.in ~all"
+undreamt.in.	600	IN	TXT	"zoho-verification=zb33264717.zmverify.zoho.in"
+zoho._domainkey.undreamt.in.	600	IN	TXT	"v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCM2iO3IDOsnGPaFbQ3dWaw97FF1ze7sGxOJfvlksr5IYAaUuGidFK4N+25cn6R29yMDunS5EUp0WQIV3unUD9NHh+bgHVKYYh1kMfCC3ijMXlwV5/9G3ZHzQ0/3cleUf+HZgw6XeLqw58uKJ75Hgz3oOOnCzCUs4EONepu03y1awIDAQAB"

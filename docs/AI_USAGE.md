@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # AI usage guide
@@ -52,7 +38,7 @@ Before submitting AI-assisted work:
 2. Check that the change respects Gabby's ownership boundaries: the host owns durable conversation
    state and caller identity; Gabby enforces runtime contracts and tool permissions.
 3. Add or update focused regression tests for behavior changes, including relevant failure paths.
-4. Run the applicable checks from the [contribution guide](../CONTRIBUTING.md) and report what was
+4. Run the applicable checks from the [contribution guide](https://github.com/undreamt-oss/gabby/blob/main/CONTRIBUTING.md) and report what was
    run, what failed, and what could not be verified.
 5. Update the closest documentation and changelog when the behavior is visible to callers or
    operators.
@@ -64,7 +50,7 @@ feedback.
 ## Disclose AI assistance
 
 AI assistance does not need a special label in every commit or pull request. Describe the actual
-change, its rationale, and its validation using the normal [contribution requirements](../CONTRIBUTING.md).
+change, its rationale, and its validation using the normal [contribution requirements](https://github.com/undreamt-oss/gabby/blob/main/CONTRIBUTING.md).
 If an AI tool materially shaped a design or implementation and that context helps reviewers evaluate
 it, mention the tool's role briefly in the pull request. Never imply that generated output was tested
 or independently verified when it was not.

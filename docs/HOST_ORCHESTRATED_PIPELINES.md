@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # Host-Orchestrated Multi-Agent Pipelines
@@ -20,7 +6,7 @@ This guide describes Approach A: a host application owns workflow decisions and 
 then calls several independently configured Gabby services for bounded agent work. Gabby remains
 the governed execution runtime for each agent. It does not become the workflow engine, identity
 provider, tenant router, or system of record. See [ADR 0130](architecture/adr/0130-host-orchestrated-multi-agent-pipelines.md)
-and the [reference example](../examples/host_orchestrated_pipeline/README.md).
+and the [reference example](https://github.com/undreamt-oss/gabby/blob/main/examples/host_orchestrated_pipeline/README.md).
 
 Use this pattern when the application needs deterministic routing, parallel specialist calls,
 host-controlled authorization, or recovery across several agent runs. Use [AgentTool composition](ARCHITECTURE.md#agent-composition)
@@ -167,7 +153,7 @@ exports usage, compute it from provider-reported result metadata and label estim
 
 ## Reference implementation and limits
 
-[`examples/host_orchestrated_pipeline/`](../examples/host_orchestrated_pipeline/) contains four
+[`examples/host_orchestrated_pipeline/`](https://github.com/undreamt-oss/gabby/tree/main/examples/host_orchestrated_pipeline) contains four
 agent configuration templates and a Python orchestration reference. The host must implement its
 token issuer, tenant retriever, checkpoint store, atomic execution claim, and registered finance
 tool. The token issuer receives the verified caller tenant and must put it in the signed JWT

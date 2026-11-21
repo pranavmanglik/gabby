@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # OpenSSF Best Practices audit
@@ -35,13 +21,13 @@ Statuses mean:
 
 | # | Criterion | Status | Evidence and remaining work |
 |---:|---|---|---|
-| 1 | Software description (`description_good`) | PASS | [README.md](../README.md) describes the problem, runtime boundary, and intended users. |
-| 2 | User feedback and contribution info (`interact`) | PASS | README links to GitHub contributions; issue templates and [CONTRIBUTING.md](../CONTRIBUTING.md) provide feedback paths. |
+| 1 | Software description (`description_good`) | PASS | [README.md](https://github.com/undreamt-oss/gabby/blob/main/README.md) describes the problem, runtime boundary, and intended users. |
+| 2 | User feedback and contribution info (`interact`) | PASS | README links to GitHub contributions; issue templates and [CONTRIBUTING.md](https://github.com/undreamt-oss/gabby/blob/main/CONTRIBUTING.md) provide feedback paths. |
 | 3 | Contribution process (`contribution`) | PASS | CONTRIBUTING explains pull requests, review, validation, and release ownership. |
 | 4 | Contribution requirements (`contribution_requirements`) | PASS | CONTRIBUTING lists supported Python, style/type/test/build/security commands, regression expectations, and ADR guidance. |
-| 5 | FLOSS license (`floss_license`) | PASS | The project is licensed under Apache-2.0 in [LICENSE](../LICENSE). |
+| 5 | FLOSS license (`floss_license`) | PASS | The project is licensed under Apache-2.0 in [LICENSE](https://github.com/undreamt-oss/gabby/blob/main/LICENSE). |
 | 6 | OSI-approved license (`floss_license_osi`) | PASS | Apache-2.0 is an OSI-approved license; the project declares it consistently in package metadata. |
-| 7 | License location (`license_location`) | PASS | The standard root [LICENSE](../LICENSE) file contains the license text. |
+| 7 | License location (`license_location`) | PASS | The standard root [LICENSE](https://github.com/undreamt-oss/gabby/blob/main/LICENSE) file contains the license text. |
 | 8 | Basic documentation (`documentation_basics`) | PASS | README and the [documentation index](index.md) link to usage, architecture, deployment, operations, and security guidance. |
 | 9 | Interface documentation (`documentation_interface`) | PASS | [README_GUIDE.md](README_GUIDE.md), [CLIENT.md](CLIENT.md), and the FastAPI OpenAPI schema document request and response contracts. |
 | 10 | HTTPS support (`sites_https`) | PASS | Repository, clone, release, and download links use HTTPS; there is no separately operated project website. |
@@ -52,7 +38,7 @@ Statuses mean:
 | 15 | Version control | PASS | Source modifications are tracked in Git. |
 | 16 | Interim changes | PASS | Development and release changes are represented in Git history and working-tree changes; release artifacts are built from version-controlled sources. |
 | 17 | Distributed version control | PASS | The project uses Git. |
-| 18 | Changelog | PASS | [CHANGELOG.md](../CHANGELOG.md) has an Unreleased section and dated version entries. |
+| 18 | Changelog | PASS | [CHANGELOG.md](https://github.com/undreamt-oss/gabby/blob/main/CHANGELOG.md) has an Unreleased section and dated version entries. |
 | 19 | Release notes | PARTIAL | Changelog entries and [RELEASING.md](RELEASING.md) define the release process. No major stable release has been published yet. |
 | 20 | Version naming | PASS | `pyproject.toml` uses a consistent PEP 440 alpha version; release validation checks tags against package metadata. |
 | 21 | Version tags | UNVERIFIED | The release workflow is tag-triggered, but no remote tag/release inventory was available in this audit session. Verify GitHub releases before the first publication. |
@@ -61,7 +47,7 @@ Statuses mean:
 | 24 | Public issue tracker | PASS | The repository uses the public GitHub issue tracker. |
 | 25 | Timely issue responses | UNVERIFIED | This audit did not measure issue response intervals or establish a maintainer response target. |
 | 26 | Searchable tracker | PASS | GitHub issues are searchable and individually URL-addressable. |
-| 27 | Vulnerability reporting policy | PASS | [SECURITY.md](../SECURITY.md) describes confidential reporting and the information to include. |
+| 27 | Vulnerability reporting policy | PASS | [SECURITY.md](https://github.com/undreamt-oss/gabby/blob/main/SECURITY.md) describes confidential reporting and the information to include. |
 | 28 | Private vulnerability channel | PARTIAL | Repository settings showed private vulnerability reporting enabled in the maintainer-provided screenshot. A non-maintainer could not use the direct advisory link earlier; verify the current reporter flow with a contributor account and document a working fallback contact. |
 | 29 | Vulnerability response time | FAIL | SECURITY.md says “as soon as practical” but sets no initial-response deadline. Maintainers need to choose and publish a realistic target. |
 | 30 | Public security policy | PASS | SECURITY.md is published at the repository root and linked from the README. |

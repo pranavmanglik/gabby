@@ -76,12 +76,12 @@ Gabby’s controls are not all enabled by default. Skill signing is optional, sa
 Install the published package from PyPI with:
 
 ```sh
-python -m pip install gabby-ai
+pip install gabby-ai
 ```
 
 The PyPI distribution is named `gabby-ai`; the Python import and command-line tool remain
 `gabby`. Add an extra when you need optional functionality, for example
-`python -m pip install "gabby-ai[server,auth]"` to run the HTTP server with JWT authentication.
+`pip install "gabby-ai[server,auth]"` to run the HTTP server with JWT authentication.
 
 To work on Gabby's source code, clone the repository and install the checkout in editable mode.
 Changes made in the checkout will then be used immediately:

@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # Host approval and audit
@@ -52,7 +38,7 @@ for backend durability, idempotency, availability, retention, and access control
 `AuditedApprovalHandler` does not catch backend exceptions; Gabby's runtime turns them into a
 sanitized approval-unavailable tool failure.
 
-See [the runnable example](../examples/approval_audit.py),
+See [the runnable example](https://github.com/undreamt-oss/gabby/blob/main/examples/approval_audit.py),
 [the approval decision](architecture/adr/0025-host-owned-tool-approval.md), and
 [ADR 0093](architecture/adr/0093-reusable-sqlite-approval-audit.md) and
 [ADR 0102](architecture/adr/0102-approval-audit-sink-contract.md).

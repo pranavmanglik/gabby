@@ -12,7 +12,7 @@
 #
 # Copyright 2026-present Gabby Contributors.
 
-"""Check ordered Apache license headers on files that support comments."""
+"""Check ordered Apache license headers on source and test files."""
 
 from __future__ import annotations
 
@@ -33,20 +33,6 @@ EXCLUDED_DIRS = {
 }
 HASH_SUFFIXES = {
     ".py",
-    ".sh",
-    ".bash",
-    ".zsh",
-    ".toml",
-    ".yaml",
-    ".yml",
-    ".lock",
-    ".conf",
-    ".ini",
-    ".cfg",
-    ".gitignore",
-    ".dockerignore",
-    ".editorconfig",
-    ".txt",
 }
 SLASH_SUFFIXES = {
     ".go",
@@ -60,8 +46,6 @@ SLASH_SUFFIXES = {
     ".c",
     ".h",
 }
-SUPPORTED_NAMES = {"Dockerfile", "CODEOWNERS"}
-HASH_NAMES = {".gitignore", ".dockerignore", ".editorconfig"}
 COPYRIGHT = "Copyright 2026-present Gabby Contributors."
 LICENSE_TEXT = (
     'Licensed under the Apache License, Version 2.0 (the "License");',
@@ -87,9 +71,7 @@ NON_COMMENTABLE_EXCEPTIONS = (
 
 def header_for(path: Path) -> tuple[list[str], str] | None:
     """Return the exact comment block and syntax marker for one supported file."""
-    if path.suffix == ".md":
-        return ["<!--", *LICENSE_TEXT, "", COPYRIGHT, "-->"], "html"
-    if path.name in SUPPORTED_NAMES | HASH_NAMES or path.suffix in HASH_SUFFIXES:
+    if path.suffix in HASH_SUFFIXES:
         marker = "#"
     elif path.suffix in SLASH_SUFFIXES:
         marker = "//"
@@ -105,7 +87,7 @@ def header_for(path: Path) -> tuple[list[str], str] | None:
 
 
 def eligible_paths() -> list[Path]:
-    """Find maintainable source, documentation, and configuration files."""
+    """Find maintainable source and test files."""
     result: list[Path] = []
     for path in ROOT.rglob("*"):
         if not path.is_file():
@@ -148,7 +130,7 @@ def validate(path: Path) -> str | None:
     separator = start + len(expected_lines)
     if separator >= len(lines) or lines[separator] != "":
         return "header must be followed by one blank line"
-    if style != "html" and expected_lines[-2].strip() != style:
+    if expected_lines[-2].strip() != style:
         return "header must include an empty comment line between license and copyright"
     return None
 
@@ -163,7 +145,7 @@ def main() -> int:
         for path, error in failures:
             print(f"{path.relative_to(ROOT)}: {error}")
         return 1
-    print(f"All {len(eligible_paths())} commentable project files have ordered Apache-2.0 headers.")
+    print(f"All {len(eligible_paths())} source and test files have ordered Apache-2.0 headers.")
     for exception in NON_COMMENTABLE_EXCEPTIONS:
         print(f"Excluded by file-format contract: {exception}.")
     return 0

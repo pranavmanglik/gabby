@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # ADR 0043: Add pluggable JWT revocation checks
@@ -63,6 +49,6 @@ store latency and availability are part of the service authentication path.
 
 This is a pre-1.0 optional API. Tests cover required `jti`, issuer-aware lookups on every request,
 revoked tokens, malformed checker results, checker exceptions and timeout, sanitized HTTP 503, and
-existing behavior when the checker is omitted. See the [authentication guide](../../../README.md),
+existing behavior when the checker is omitted. See the [authentication guide](https://github.com/undreamt-oss/gabby/blob/main/README.md),
 [extension guide](../../EXTENSIONS.md), [operations guide](../../OPERATIONS.md), and
 [threat model](../../THREAT_MODEL.md).
