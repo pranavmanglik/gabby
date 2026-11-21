@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # ADR 0060: Detached Ed25519 signatures for skill packages
@@ -64,4 +50,4 @@ beyond the host's trust mapping. Remote registry transport and discovery remain 
 This is a pre-1.0 additive API. Tests cover raw key handling, signature generation and verification,
 tampered packages, untrusted keys, signature-required installs, CLI secret injection, and installer
 cleanup. See the [extension guide](../../EXTENSIONS.md), [threat model](../../THREAT_MODEL.md), and
-[agent configuration examples](../../../README.md#define-an-agent).
+[agent configuration examples](https://github.com/undreamt-oss/gabby/blob/main/README.md#define-an-agent).

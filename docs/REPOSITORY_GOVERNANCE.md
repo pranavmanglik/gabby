@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # Repository governance and branch protection
@@ -50,7 +36,7 @@ enable CodeQL and Scorecard as merge checks only after their pull-request result
 Repository settings cannot be enforced by workflow files alone. Confirm each configured code owner
 (user or team) exists and has the required repository access before making code-owner approval a
 required rule.
-Track this and other repository-owned controls in the [maintainer handoff](../HANDOFF.md).
+Track this and other repository-owned controls in the [maintainer handoff](https://github.com/undreamt-oss/gabby/blob/main/HANDOFF.md).
 
 ## Workflow and supply-chain policy
 
@@ -67,7 +53,7 @@ Pull-request and release workflows should retain the following controls:
 A successful workflow proves only that its checks passed for the tested source. It does not certify
 an untested model provider, sandbox host, or production deployment. Record external setup such as
 branch rules, protected release environments, and PyPI Trusted Publisher configuration in the
-[release guide](RELEASING.md) and [maintainer handoff](../HANDOFF.md).
+[release guide](RELEASING.md) and [maintainer handoff](https://github.com/undreamt-oss/gabby/blob/main/HANDOFF.md).
 
 ## Contributor expectations
 

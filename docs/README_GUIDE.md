@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # Gabby User Guide
@@ -23,12 +9,12 @@ This guide explains how to use Gabby's agent runtime and governance capabilities
 Install Gabby from PyPI:
 
 ```sh
-python -m pip install gabby-ai
+pip install gabby-ai
 ```
 
 The distribution is named `gabby-ai`, while Python code imports `gabby` and the CLI command is
-`gabby`. Install optional features with extras, such as `python -m pip install
-"gabby-ai[server,auth]"` for the HTTP server and JWT authentication.
+`gabby`. Install optional features with extras, such as `pip install "gabby-ai[server,auth]"`
+for the HTTP server and JWT authentication.
 
 For local development inside the repository, install the locked contributor environment instead:
 
@@ -137,7 +123,7 @@ to `https://generativelanguage.googleapis.com/v1beta`. See the official
 [function calling guide](https://ai.google.dev/gemini-api/docs/generate-content/function-calling).
 
 Opt-in live completion and streaming acceptance checks for Ollama and Hugging Face are documented
-in [`tests/integration/README.md`](../tests/integration/README.md). They use credentials from the host
+in [`tests/integration/README.md`](https://github.com/undreamt-oss/gabby/blob/main/tests/integration/README.md). They use credentials from the host
 environment and are skipped by the regular test suite unless explicitly enabled.
 
 An optional `skills/debugging/skill.yaml` can define a reusable skill:
@@ -298,7 +284,7 @@ passes validation. See the [structured output guide](../docs/STRUCTURED_OUTPUT.m
 Runnable support, research, and data-analysis examples use an offline mock model and synthetic
 application tools. Run them with `uv run --frozen python examples/domain_agents.py`. The separate
 `examples/agent_composition.py` demonstrates bounded parent/child delegation and correlated traces;
-both need no credentials or network. See the [examples guide](../examples/README.md). The public Python
+both need no credentials or network. See the [examples guide](https://github.com/undreamt-oss/gabby/blob/main/examples/README.md). The public Python
 package exports `AgentDefinition`, `SkillDefinition`, and `ModelResponse` for in-memory composition
 and custom model providers.
 

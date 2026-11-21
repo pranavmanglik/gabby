@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # ADR 0042: Map JWT scopes to Gabby capabilities
@@ -63,5 +49,5 @@ does not establish tenant isolation, revoke tokens, or constrain other applicati
 
 This is a pre-1.0 API. Tests cover mapping validation, one-to-many mappings, dropping unmapped
 claims, pass-through compatibility, and FastAPI route authorization based on mapped capabilities.
-See the [authentication guide](../../../README.md), [operations guide](../../OPERATIONS.md), and
+See the [authentication guide](https://github.com/undreamt-oss/gabby/blob/main/README.md), [operations guide](../../OPERATIONS.md), and
 [threat model](../../THREAT_MODEL.md).

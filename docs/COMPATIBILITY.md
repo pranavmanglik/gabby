@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # Compatibility and deprecation policy
@@ -110,4 +96,4 @@ and CI matrix define its supported Python versions.
 User-visible changes belong in `CHANGELOG.md`. A public-contract change also requires an ADR when it
 changes lifecycle, security, concurrency, wire behavior, or compatibility guarantees. Pull requests
 that change a supported contract should update the contract reference and add or adjust contract
-tests. See [CONTRIBUTING.md](../CONTRIBUTING.md) and [ADR 0009](architecture/adr/0009-pre-1-0-extension-api-policy.md).
+tests. See [CONTRIBUTING.md](https://github.com/undreamt-oss/gabby/blob/main/CONTRIBUTING.md) and [ADR 0009](architecture/adr/0009-pre-1-0-extension-api-policy.md).

@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # Operating Gabby
@@ -181,7 +167,7 @@ agent = Agent.from_file(
 
 Every instance must use the same Redis key and trusted publisher set. This distributes revocation
 state only; public signing keys still need deployment-wide rotation. The runnable
-[`redis_skill_revocation.py` example](../examples/redis_skill_revocation.py) shows host client
+[`redis_skill_revocation.py` example](https://github.com/undreamt-oss/gabby/blob/main/examples/redis_skill_revocation.py) shows host client
 lifecycle and the shared management calls.
 The per-run content check runs within the configured execution deadline. HTTP returns a sanitized
 403 if the package no longer verifies under its construction-time trusted signer; SSE sends the
@@ -283,7 +269,7 @@ For shared storage beyond the same-host SQLite boundary, inject an async `Stream
 backend's initialization, credentials, durability, and shutdown. Implement its atomic session and
 event operations as documented in the [extension contract](EXTENSION_CONTRACTS.md#extension-matrix).
 
-The repository includes a complete [Nginx configuration](../deploy/nginx.conf) with a rate-limited
+The repository includes a complete [Nginx configuration](https://github.com/undreamt-oss/gabby/blob/main/deploy/nginx.conf) with a rate-limited
 run and stream route, streaming-safe proxy settings, an unthrottled health route, and a default 404.
 It targets a Gabby listener on `127.0.0.1:8787`; adapt the upstream, TLS certificate paths, host
 name, rate, and burst to the deployment. It restricts TLS to versions 1.2 and 1.3, disables session
@@ -388,4 +374,4 @@ authentication path, rate limiting, tenant routing, provider credentials, proces
 retention, database backups, and sandbox cleanup. Run live sandbox acceptance for each host/engine/
 adapter combination in use. Rehearse provider outage, container-daemon outage, SQLite restore,
 429 behavior, request cancellation, and service shutdown. Document how credentials and container
-images are rotated. See [ROADMAP.md](../ROADMAP.md) for current evidence gaps.
+images are rotated. See [ROADMAP.md](https://github.com/undreamt-oss/gabby/blob/main/ROADMAP.md) for current evidence gaps.

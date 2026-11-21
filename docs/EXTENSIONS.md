@@ -1,17 +1,3 @@
-<!--
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-Copyright 2026-present Gabby Contributors.
 -->
 
 # Extension API policy
@@ -40,7 +26,7 @@ keeps its own tools and policies; the host owns and closes both agents. Calls ar
 parent tool timeout and byte caps, and cycles or delegation deeper than eight agents fail closed.
 The child trace carries the parent run ID in its `parent_trace_id` metadata and request event so
 independently exported traces can be correlated without merging their event contents.
-See the [agent composition example](../README.md#compose-specialized-agents).
+See the [agent composition example](https://github.com/undreamt-oss/gabby/blob/main/README.md#compose-specialized-agents).
 
 Inject extension implementations when constructing an `Agent` or a FastAPI app. Current examples
 include `ModelProvider`, `Environment`, `PolicyEngineFactory`, `Retriever`, `KnowledgeStore`,
@@ -154,7 +140,7 @@ owns client lifecycle, credentials, TLS, persistence, routing, and the read-afte
 guarantee. Configure a namespaced set key per trust domain. The store defaults to a 100,000-entry
 management-list bound; the runtime checker validates at most 1,024 signer IDs per call and reads
 fresh state without caching. Its live propagation behavior depends on which Redis authority the host
-client queries. See the [shared revocation example](../examples/redis_skill_revocation.py) and
+client queries. See the [shared revocation example](https://github.com/undreamt-oss/gabby/blob/main/examples/redis_skill_revocation.py) and
 [ADR 0101](architecture/adr/0101-redis-skill-revocation-adapter.md).
 
 Tools that opt into `ToolContext` receive a read-only `CancellationToken`. A synchronous handler can
@@ -371,7 +357,7 @@ Remote endpoints must use HTTPS, requests and streamed responses are capped at 4
 and the provider call defaults to a 120-second timeout. Candidate text is sent to Voyage; review its
 [API reference](https://docs.voyageai.com/reference/reranker-api) and data terms for your deployment.
 An opt-in live API contract check is documented in
-[`tests/integration/README.md`](../tests/integration/README.md).
+[`tests/integration/README.md`](https://github.com/undreamt-oss/gabby/blob/main/tests/integration/README.md).
 
 ```python
 from gabby import RerankingRetriever, VoyageReranker
@@ -501,4 +487,4 @@ provider, retriever, verifier, authenticator, or selector code.
 - Review the changelog and ADRs when upgrading between pre-1.0 versions.
 
 See [ADR 0009](architecture/adr/0009-pre-1-0-extension-api-policy.md) for the accepted stability
-policy and [CONTRIBUTING.md](../CONTRIBUTING.md) for repository practices.
+policy and [CONTRIBUTING.md](https://github.com/undreamt-oss/gabby/blob/main/CONTRIBUTING.md) for repository practices.
