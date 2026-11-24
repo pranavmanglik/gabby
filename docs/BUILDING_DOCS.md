@@ -1,5 +1,3 @@
--->
-
 # Build and preview the documentation
 
 The documentation site is built from the Markdown files in `docs/` with MkDocs and Material for

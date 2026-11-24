@@ -1,5 +1,3 @@
--->
-
 # Python HTTP client
 
 `GabbyClient` lets another Python application call a local or hosted Gabby service using the
