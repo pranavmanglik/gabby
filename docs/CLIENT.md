@@ -1,5 +1,3 @@
--->
-
 # Python HTTP client
 
 `GabbyClient` lets another Python application call a local or hosted Gabby service using the
@@ -54,4 +52,4 @@ type. Stream events arrive as `StreamEvent` objects; an `error` event is yielded
 part of the stream.
 
 See [API compatibility policy](COMPATIBILITY.md) for the pre-1.0 extension contract and
-[API serving](ARCHITECTURE.md#serving) for server-side authentication and deployment boundaries.
+[API serving](ARCHITECTURE.md#deployment) for server-side authentication and deployment boundaries.
