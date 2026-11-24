@@ -30,7 +30,8 @@ Build the static site for a production-style check with:
 mkdocs build
 ```
 
-The generated site is written to `site/`, which should remain a build artifact and not be committed.
+The generated site is written to `site/gabby/`, which should remain a build artifact and not be
+committed.
 
 ## Host on Read the Docs
 
@@ -40,7 +41,7 @@ using the isolated documentation requirements. Enable builds for the branch or t
 publish; the default version is generally the `latest` branch build.
 
 The site uses Read the Docs' canonical URL when that environment value is available. Local builds
-and other hosts fall back to `https://docs.undreamt.in/`.
+and other hosts fall back to `https://docs.undreamt.in/gabby/`.
 
 To serve Gabby at this subdomain, add `docs.undreamt.in` under the project's **Admin → Domains**
 settings in Read the Docs and mark it canonical. Then add the CNAME record Read the Docs provides
@@ -52,8 +53,10 @@ to upload directly to production DNS.
 
 ## Host on GitHub Pages
 
-The repository includes a GitHub Actions workflow that builds `mkdocs.yml` and deploys the
-generated `site/` directory. In the repository's **Settings → Pages**, set **Build and deployment
+The repository includes a GitHub Actions workflow that builds `mkdocs.yml` into `site/gabby/`, then
+deploys the containing `site/` directory. The published docs are available at
+`https://docs.undreamt.in/gabby/`; the domain root redirects to Gabby's docs. In the repository's
+**Settings → Pages**, set **Build and deployment
 → Source** to **GitHub Actions**. The workflow runs for documentation and MkDocs configuration
 changes on `main`, or can be started manually from the Actions tab.
 
@@ -61,11 +64,12 @@ The workflow installs from the hash-locked `docs/requirements.lock.txt`. After c
 `docs/requirements.txt`, regenerate the lock with
 `uv pip compile --generate-hashes --universal -o docs/requirements.lock.txt docs/requirements.txt`.
 
-To use `docs.undreamt.in` with GitHub Pages, set it as the custom domain in **Settings → Pages**
-and create a DNS `CNAME` record with name `docs` pointing to `undreamt-oss.github.io`. If Cloudflare
-hosts the DNS zone, set the record to **DNS only**. The `docs` subdomain can point to only one host;
-use either GitHub Pages' target here or the Read the Docs target from its dashboard. Wait for
-GitHub's DNS check and HTTPS certificate before enforcing HTTPS.
+To use `docs.undreamt.in` with GitHub Pages, set `docs.undreamt.in` as the custom domain in
+**Settings → Pages** (enter the hostname only; `/gabby` is the site path) and create a DNS `CNAME`
+record with name `docs` pointing to `undreamt-oss.github.io`. If Cloudflare hosts the DNS zone, set
+the record to **DNS only**. The `docs` subdomain can point to only one host; use either GitHub Pages'
+target here or the Read the Docs target from its dashboard. Wait for GitHub's DNS check and HTTPS
+certificate before enforcing HTTPS.
 
 For each published Read the Docs version, review the build log and open the resulting site to check
 navigation, search, code blocks, and internal links. Keep the generated `site/` directory out of Git.

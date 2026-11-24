@@ -1,10 +1,10 @@
 site_name: Gabby
 site_description: Documentation for the Gabby agent governance and execution runtime.
-site_url: !ENV [READTHEDOCS_CANONICAL_URL, https://docs.undreamt.in/]
+site_url: !ENV [READTHEDOCS_CANONICAL_URL, https://docs.undreamt.in/gabby/]
 repo_url: https://github.com/undreamt-oss/gabby
 edit_uri: edit/main/docs/
 docs_dir: docs
-site_dir: site
+site_dir: site/gabby
 
 theme:
   name: material
