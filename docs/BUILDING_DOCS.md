@@ -57,6 +57,10 @@ generated `site/` directory. In the repository's **Settings → Pages**, set **B
 → Source** to **GitHub Actions**. The workflow runs for documentation and MkDocs configuration
 changes on `main`, or can be started manually from the Actions tab.
 
+The workflow installs from the hash-locked `docs/requirements.lock.txt`. After changing
+`docs/requirements.txt`, regenerate the lock with
+`uv pip compile --generate-hashes --universal -o docs/requirements.lock.txt docs/requirements.txt`.
+
 To use `docs.undreamt.in` with GitHub Pages, set it as the custom domain in **Settings → Pages**
 and create a DNS `CNAME` record with name `docs` pointing to `undreamt-oss.github.io`. If Cloudflare
 hosts the DNS zone, set the record to **DNS only**. The `docs` subdomain can point to only one host;
