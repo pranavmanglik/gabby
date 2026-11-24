@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <!--
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,97 +14,86 @@ limitations under the License.
 
 Copyright 2026-present Gabby Contributors.
 -->
+=======
+---
+title: Gabby documentation
+description: Guides and references for Gabby's agent runtime and governance framework.
+hide:
+  - toc
+---
+>>>>>>> Stashed changes
 
-# Gabby Documentation
+<div class="gabby-docs-home" markdown>
 
-This is the entry point for Gabby's user, architecture, operator, and contributor documentation.
-Gabby is an Agent Runtime and Governance Framework: it lets developers define agent
-capabilities, govern tool use, and execute requests within explicit runtime contracts. Execution is
-stateless between requests; the consuming application owns conversation history and durable memory.
-It is designed to complement orchestration frameworks such as LangChain, CrewAI, and IBM BeeAI:
-those frameworks can coordinate agents and workflows, while Gabby supplies governed execution for
-configured agent requests. Gabby is not intended to replace the host application's orchestration layer.
+<div class="docs-home-hero" markdown>
 
-Gabby is maintained in the [`undreamt-oss` GitHub organization](https://github.com/undreamt-oss/gabby).
-This site brings the user guide, runtime contracts, security boundaries, and operating references
-together in one searchable place. Use the navigation to browse by task, or start with the guide
-below.
+<div class="docs-home-eyebrow">AGENT RUNTIME · GOVERNED EXECUTION</div>
 
-## Start here
+# Build agents with clear boundaries.
 
-- [Project overview and quick start](https://github.com/undreamt-oss/gabby/blob/main/README.md) —
-  understand Gabby's governance and execution boundary and run the offline starter flow.
-- [Complete user guide](README_GUIDE.md) — install Gabby, configure providers, define agents, use
-  skills, tools, and knowledge, and use the Python and HTTP interfaces.
-- [Examples](https://github.com/undreamt-oss/gabby/tree/main/examples) — runnable offline examples and a hosted-service example.
-- [CLI and API guide](https://github.com/undreamt-oss/gabby/blob/main/README.md#cli-and-api) —
-  use the `gabby` developer command line and local service.
-- [Python HTTP client](CLIENT.md) — call the stateless HTTP API from another Python application.
-- [Multi-language HTTP/SSE clients](https://github.com/undreamt-oss/gabby/tree/main/sdks) — call
-  Gabby from TypeScript/Node.js, Go, or Rust.
-- [Runtime integrations](INTEGRATIONS.md) — connect MCP servers, OpenTelemetry, signed audit
-  evidence, LangGraph, CrewAI, and n8n.
+Gabby gives applications a place to define agent capabilities, govern tool access and run tasks
+within explicit limits. These docs cover how to use it, how its runtime is put together, and what
+to check before operating it.
 
-## Architecture and contracts
+<div class="docs-home-actions" markdown>
 
-- [Architecture overview](ARCHITECTURE.md) — component ownership, request lifecycle, state
-  boundaries, policy enforcement, and deployment interfaces.
-- [Extension contracts](EXTENSION_CONTRACTS.md) — interface responsibilities, lifecycle ownership,
-  concurrency, and failure behavior.
-- [Extension guide](EXTENSIONS.md) — build providers, tools, retrievers, policies, and other
-  replaceable components.
-- [Host-orchestrated multi-agent pipelines](HOST_ORCHESTRATED_PIPELINES.md) — coordinate separate
-  single-agent Gabby services with host-owned state, caller scopes, tenant retrieval, and recovery.
-- [API stability policy](API_STABILITY.md) — current pre-1.0 compatibility rules.
-- [Proposed compatibility contract](COMPATIBILITY.md) — candidate public contract for a future 1.0
-  release; it is not in force during 0.x.
-- [Architecture decision records](architecture/adr/README.md) — accepted design choices and their
-  consequences.
+[Start with the user guide](README_GUIDE.md){ .md-button .md-button--primary }
+[Understand the architecture](ARCHITECTURE.md){ .md-button }
 
-## Capabilities
+</div>
+</div>
 
-- [Starter skill bundles](https://github.com/undreamt-oss/gabby/tree/main/bundles) — reviewed source
-  templates and signed release bundle installation.
-- [Skill registry](SKILL_REGISTRY.md) — skill structure, exact versions, packages, signatures,
-  trust, and registry operations.
-- [Structured output](STRUCTURED_OUTPUT.md) — JSON Schema contracts for agent responses.
-- [Approval handling](APPROVALS.md) — host-owned approval decisions and audit records.
-- [SQLite data tool](SQLITE_DATA.md) — bounded read-only SQL against a host-selected database.
-- [Sandboxed Python tool](PYTHON_TOOL.md) — execute bounded Python in a per-run container.
+## Find the right guide
 
-## Operations and security
+<div class="grid cards" markdown>
 
-- [Threat model](THREAT_MODEL.md) — trust boundaries, implemented controls, and residual risks.
-- [Operations guide](OPERATIONS.md) — authentication, resource limits, storage, tracing, and
-  deployment responsibilities.
-- [Scaling and operational tradeoffs](SCALING_AND_OPERATIONS.md) — sync callbacks, vector scale,
-  streaming, platform gates, and schema prototyping.
-- [Container deployment](DEPLOYMENT_CONTAINER.md) and [Kubernetes reference](DEPLOYMENT_KUBERNETES.md).
-- [Security policy](https://github.com/undreamt-oss/gabby/blob/main/SECURITY.md) — private vulnerability reporting.
+-   **Get started**
 
-## Contributing and release readiness
+    ---
 
-- [Contributing](https://github.com/undreamt-oss/gabby/blob/main/CONTRIBUTING.md) — development
-  environment, required checks, and change expectations.
-- [AI usage guide](AI_USAGE.md) — responsible use of AI tools while contributing, including review,
-  validation, and data protection.
-- [Repository governance](REPOSITORY_GOVERNANCE.md) — Gabby's contribution safeguards and repository
-  settings maintainers must verify.
-- [Release procedure](RELEASING.md) — tag validation, build, attestations, and PyPI publishing.
-- [Project roadmap](https://github.com/undreamt-oss/gabby/blob/main/ROADMAP.md) and [readiness
-  scorecard](PROJECT_SCORECARD.md) — current implementation evidence and open release gates.
+    Install Gabby, configure an agent and run it through the Python or HTTP interface.
 
-## Release status
+    [User guide](README_GUIDE.md) · [HTTP client](CLIENT.md)
 
-Gabby is pre-1.0 beta software (`0.1.0b5`). Local tests and static checks establish only the
-behaviors they exercise; they do not certify a hosted deployment, every model/provider combination,
-or every container host and engine. Review the threat model and scorecard before using sensitive
-data or making production claims. See the
-[0.1.0 beta release notes](https://github.com/undreamt-oss/gabby/blob/main/CHANGELOG.md#planned-010-beta-010b5)
-for the scope of this pre-release.
+-   **Understand the runtime**
 
-## Preview or contribute to this site
+    ---
 
-The [documentation build guide](BUILDING_DOCS.md) explains how to preview the site locally and
-connect the repository to Read the Docs. To suggest an edit, use the **Edit this page** link at the
-top of a page or open a pull request against the repository.
+    Follow the request lifecycle, state ownership, policy checks and public contracts.
+
+    [Architecture](ARCHITECTURE.md) · [API stability](API_STABILITY.md)
+
+-   **Add capabilities**
+
+    ---
+
+    Extend providers and tools, configure approvals, and work with skills and structured output.
+
+    [Extensions](EXTENSIONS.md) · [Skill registry](SKILL_REGISTRY.md)
+
+-   **Operate with care**
+
+    ---
+
+    Review the threat model, deployment boundaries and operational responsibilities.
+
+    [Threat model](THREAT_MODEL.md) · [Operations](OPERATIONS.md)
+
+</div>
+
+## Project status
+
+!!! warning "Pre-1.0 beta"
+    Gabby is beta software (`0.1.0b5`), and public extension APIs may change before 1.0. Tests and
+    static checks cover only the behaviors they exercise. Review the [API stability policy](API_STABILITY.md),
+    [threat model](THREAT_MODEL.md) and [readiness scorecard](PROJECT_SCORECARD.md) when evaluating
+    Gabby for a deployment.
+
+## More to explore
+
+- [Examples](https://github.com/undreamt-oss/gabby/tree/main/examples) and [starter bundles](https://github.com/undreamt-oss/gabby/tree/main/bundles)
+- [Runtime integrations](INTEGRATIONS.md) and [host-orchestrated pipelines](HOST_ORCHESTRATED_PIPELINES.md)
+- [Contributing guide](https://github.com/undreamt-oss/gabby/blob/main/CONTRIBUTING.md) and [architecture decisions](architecture/adr/README.md)
+- [Build or preview this documentation](BUILDING_DOCS.md)
+
+</div>

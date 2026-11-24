@@ -66,5 +66,18 @@ Docs dashboard if it differs. This configures the `docs` subdomain while leaving
 and `www` records in place. The zone export in `undreamt.in.txt` is archival guidance, not a file
 to upload directly to production DNS.
 
-For each published version, review the Read the Docs build log and open the resulting site to check
+## Host on GitHub Pages
+
+The repository includes a GitHub Actions workflow that builds `mkdocs.yml` and deploys the
+generated `site/` directory. In the repository's **Settings → Pages**, set **Build and deployment
+→ Source** to **GitHub Actions**. The workflow runs for documentation and MkDocs configuration
+changes on `main`, or can be started manually from the Actions tab.
+
+To use `docs.undreamt.in` with GitHub Pages, set it as the custom domain in **Settings → Pages**
+and create a DNS `CNAME` record with name `docs` pointing to `undreamt-oss.github.io`. If Cloudflare
+hosts the DNS zone, set the record to **DNS only**. The `docs` subdomain can point to only one host;
+use either GitHub Pages' target here or the Read the Docs target from its dashboard. Wait for
+GitHub's DNS check and HTTPS certificate before enforcing HTTPS.
+
+For each published Read the Docs version, review the build log and open the resulting site to check
 navigation, search, code blocks, and internal links. Keep the generated `site/` directory out of Git.

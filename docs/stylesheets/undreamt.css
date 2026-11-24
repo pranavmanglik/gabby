@@ -22,6 +22,7 @@ Copyright 2026-present Gabby Contributors.
   --md-accent-fg-color: #8b5cf6;
   --md-accent-fg-color--transparent: rgb(139 92 246 / 10%);
   --md-default-bg-color: #f4f4f0;
+  --md-default-bg-color--light: #ffffff;
   --md-default-fg-color: #111113;
   --md-default-fg-color--light: #3f3f46;
   --md-default-fg-color--lighter: #71717a;
@@ -37,8 +38,8 @@ Copyright 2026-present Gabby Contributors.
   --md-primary-fg-color: #0b0b0e;
   --md-primary-fg-color--light: #222228;
   --md-primary-fg-color--dark: #08080a;
-  --md-accent-fg-color: #a78bfa;
-  --md-accent-fg-color--transparent: rgb(167 139 250 / 12%);
+  --md-accent-fg-color: #c4ff00;
+  --md-accent-fg-color--transparent: rgb(196 255 0 / 12%);
   --md-default-bg-color: #0b0b0e;
   --md-default-bg-color--light: #101014;
   --md-default-bg-color--lighter: #16161b;
@@ -94,4 +95,143 @@ body,
 
 .md-typeset pre > code {
   border-radius: 0.5rem;
+}
+
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.md-search__form {
+  border: 1px solid rgb(244 244 246 / 8%);
+  border-radius: 0.5rem;
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  text-wrap: balance;
+}
+
+.md-typeset hr {
+  border-bottom-color: rgb(244 244 246 / 10%);
+}
+
+.gabby-docs-home .docs-home-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin: 0 0 2.75rem;
+  padding: clamp(1.5rem, 5vw, 3.75rem) 0 2.5rem;
+  border-bottom: 1px solid rgb(244 244 246 / 10%);
+}
+
+.gabby-docs-home .docs-home-hero::after {
+  position: absolute;
+  z-index: -1;
+  top: -8rem;
+  right: -7rem;
+  width: min(32rem, 70vw);
+  height: min(24rem, 55vw);
+  border: 1px solid rgb(167 139 250 / 20%);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2.5rem rgb(167 139 250 / 3%), 0 0 0 5rem rgb(167 139 250 / 2%);
+  content: "";
+  pointer-events: none;
+  transform: rotate(-22deg);
+}
+
+.gabby-docs-home .docs-home-eyebrow {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  color: #c4ff00;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  line-height: 1.5;
+}
+
+.gabby-docs-home .docs-home-hero h1 {
+  max-width: 16ch;
+  margin: 0 0 1rem;
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.gabby-docs-home .docs-home-hero > p:not(.docs-home-eyebrow) {
+  max-width: 48rem;
+  color: var(--md-default-fg-color--light);
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  line-height: 1.7;
+}
+
+.gabby-docs-home .docs-home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.gabby-docs-home .docs-home-actions .md-button {
+  margin: 0;
+  border-radius: 0.4rem;
+  font-weight: 600;
+}
+
+[data-md-color-scheme="slate"] .gabby-docs-home .docs-home-actions .md-button--primary {
+  border-color: #c4ff00;
+  background: #c4ff00;
+  color: #0b0b0e;
+}
+
+[data-md-color-scheme="slate"] .gabby-docs-home .docs-home-actions .md-button--primary:hover {
+  border-color: #d3ff3d;
+  background: #d3ff3d;
+}
+
+.gabby-docs-home .grid.cards > ul > li {
+  border: 1px solid rgb(244 244 246 / 10%);
+  border-radius: 0.75rem;
+  background:
+    radial-gradient(circle at 100% 0%, rgb(76 34 255 / 13%), transparent 68%),
+    var(--md-default-bg-color--light);
+  box-shadow: none;
+  transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.gabby-docs-home .grid.cards > ul > li:hover {
+  border-color: rgb(167 139 250 / 55%);
+  box-shadow: 0 0.75rem 2.5rem rgb(0 0 0 / 16%);
+  transform: translateY(-3px);
+}
+
+.gabby-docs-home .grid.cards > ul > li > hr {
+  border-bottom-color: rgb(244 244 246 / 12%);
+}
+
+.gabby-docs-home .grid.cards > ul > li a {
+  font-weight: 600;
+}
+
+.gabby-docs-home .admonition {
+  border-radius: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .gabby-docs-home .docs-home-hero {
+    padding-top: 1.5rem;
+  }
+
+  .gabby-docs-home .docs-home-hero::after {
+    top: -4rem;
+    right: -10rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gabby-docs-home .grid.cards > ul > li {
+    transition: none;
+  }
 }
