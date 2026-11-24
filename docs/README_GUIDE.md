@@ -197,7 +197,7 @@ package installation and inspection by default, verified against host-managed pu
 the optional `skill-signing` extra to enable signature verification. Skill contents remain untrusted
 instructions and should be reviewed before attaching them to an agent. Static HTTPS registries support
 catalog search, exact version discovery, and signature-required installation; see the
-[skill registry guide](../docs/SKILL_REGISTRY.md). You can also place a package directory beside an
+[skill registry guide](SKILL_REGISTRY.md). You can also place a package directory beside an
 agent definition or add its parent directory to `skill_paths`.
 
 To sign and require a publisher key, install the extra and provide the raw 32-byte private key as
@@ -226,8 +226,8 @@ invalid records. This metadata is advisory and does not disable installed skills
 current contents are unchanged. `gabby skill uninstall` removes one validated exact skill version
 and requires `--yes`. Hosts distributing skills should keep private keys in a KMS or
 secret manager and manage trusted-key distribution and revocation. See the
-[skill package guide](../docs/EXTENSIONS.md#portable-skill-packages) and
-[registry operations guide](../docs/SKILL_REGISTRY.md).
+[extension guide](EXTENSIONS.md) and
+[registry operations guide](SKILL_REGISTRY.md).
 
 Skill manifests use semantic versions. Existing manifests without `version` default to `0.1.0`.
 Pin an exact version in the agent with `skills: [debugging@1.0.0]`; skill dependencies can also use
@@ -271,7 +271,7 @@ Gabby’s runtime is not tied to coding. For example, a developer can build:
 
 - A **knowledge-grounded support agent** that retrieves product guides and calls a registered ticket lookup or escalation tool.
 - A **research agent** that searches an application-provided source, summarizes evidence, and returns citations. Gabby supplies retrieval contracts; a web search/browser tool must be registered by the application.
-- A **data agent** that queries approved datasets through registered SQL or analysis tools. The opt-in [`sqlite_query_tool()`](../docs/SQLITE_DATA.md) provides bounded, read-only local SQLite queries. The sandboxed [`python_run_tool()`](../docs/PYTHON_TOOL.md) runs analysis code in the configured per-run container; other database access and authorization belong in application tools and their environment.
+- A **data agent** that queries approved datasets through registered SQL or analysis tools. The opt-in [`sqlite_query_tool()`](SQLITE_DATA.md) provides bounded, read-only local SQLite queries. The sandboxed [`python_run_tool()`](PYTHON_TOOL.md) runs analysis code in the configured per-run container; other database access and authorization belong in application tools and their environment.
 - A **coding agent** that uses Gabby’s built-in container-backed shell and workspace tools.
 
 These are agent configurations and integrations, not four prebuilt products shipped by Gabby. Coding is the most turnkey initial path because shell and filesystem are its first built-in tools. Other domains can use the same model, skill, policy, execution, and API contracts, with application-provided tools.
@@ -279,7 +279,7 @@ These are agent configurations and integrations, not four prebuilt products ship
 Agents that feed other software can declare a JSON Schema for their final output. Gabby validates
 the result and exposes the parsed value in `result.metadata["structured_output"]`; the same value is
 available in `/run` and SSE completion metadata. Streaming calls hold back response text until it
-passes validation. See the [structured output guide](../docs/STRUCTURED_OUTPUT.md).
+passes validation. See the [structured output guide](STRUCTURED_OUTPUT.md).
 
 Runnable support, research, and data-analysis examples use an offline mock model and synthetic
 application tools. Run them with `uv run --frozen python examples/domain_agents.py`. The separate
@@ -322,14 +322,14 @@ Only the model-produced task string is sent to the child. Parent context, memory
 caller identity are not forwarded by default. Set `forward_principal=True` only when the child
 approval handler should receive the authenticated caller identity. Child calls inherit the parent
 tool timeout and byte bounds; cycles and chains deeper than eight agents are rejected. The host owns
-and closes every agent in the composition. See the [extension contract reference](../docs/EXTENSION_CONTRACTS.md).
+and closes every agent in the composition. See the [extension contract reference](EXTENSION_CONTRACTS.md).
 
 ## Tool trust and isolation
 
 Tools run as `host_trusted` by default. Their handlers execute inside the Gabby process with its host operating-system permissions; registering a handler grants the agent a way to invoke that code. `Tool.execution` exposes this classification. Gabby requires sandboxed execution by default and rejects host-trusted tools before the model is called. Set `policies.require_sandbox: false` only when the host intentionally accepts in-process handlers. The built-in shell and filesystem tools declare `execution: sandboxed` and run in the configured per-run container. Use `sandboxed_python_tool()` for importable Python handlers that should run inside that sandbox; the selected image must include Gabby and the handler package.
 
-See the [threat model](../docs/THREAT_MODEL.md) for trust boundaries, current controls, residual risks,
-and the evidence required before hosted-production claims. See the [operations guide](../docs/OPERATIONS.md)
+See the [threat model](THREAT_MODEL.md) for trust boundaries, current controls, residual risks,
+and the evidence required before hosted-production claims. See the [operations guide](OPERATIONS.md)
 for service, storage, streaming, and sandbox deployment responsibilities.
 
 ## Model payload filters
@@ -424,9 +424,9 @@ construction. Tool observations, trace events, and `tool_failed` stream events a
 stable `error_code` such as `invalid_arguments`, `policy_denied`, or `result_too_large`. The
 `ToolError` and `ToolErrorCode` types are public for custom tools; Gabby preserves a handler's
 failure code while redacting its exception message from model context. See
-[ADR 0053](../docs/architecture/adr/0053-required-tool-output-schemas.md) and
-[ADR 0054](../docs/architecture/adr/0054-stable-tool-error-codes.md).
-See [ADR 0013](../docs/architecture/adr/0013-tool-result-size-limits.md) for the contract and tradeoffs.
+[ADR 0053](architecture/adr/0053-required-tool-output-schemas.md) and
+[ADR 0054](architecture/adr/0054-stable-tool-error-codes.md).
+See [ADR 0013](architecture/adr/0013-tool-result-size-limits.md) for the contract and tradeoffs.
 
 Mark side-effecting tools with `requires_approval=True` and inject a host-owned approval handler.
 The runtime validates arguments first, waits within the run deadline, and denies execution when no
@@ -453,8 +453,8 @@ send_tool = Tool(
 agent = Agent.from_file("agent.yaml", tools=tools, approval_handler=AppApproval())
 ```
 
-See [ADR 0025](../docs/architecture/adr/0025-host-owned-tool-approval.md). Approval decisions are
-per-call and per-run; Gabby does not retain them. The [approval guide](../docs/APPROVALS.md) shows
+See [ADR 0025](architecture/adr/0025-host-owned-tool-approval.md). Approval decisions are
+per-call and per-run; Gabby does not retain them. The [approval guide](APPROVALS.md) shows
 how to connect host review to the reusable SQLite audit helper without storing raw arguments.
 
 ## Container sandbox tools
@@ -577,7 +577,7 @@ and is configurable; stdout and stderr share a 1 MiB sandbox output limit. Excee
 the engine command and run container. Results are also checked against `output_schema` when
 provided. The executable and argv come from trusted agent configuration,
 never from model-supplied tool arguments. See
-[ADR 0003](../docs/architecture/adr/0003-container-sandbox.md).
+[ADR 0003](architecture/adr/0003-container-sandbox.md).
 
 For Python handlers packaged in the selected image, `sandboxed_python_tool()` creates the fixed
 worker command and keeps the callable out of the main Gabby process:
@@ -651,9 +651,9 @@ lookup_tool = Tool(
 )
 ```
 
-See [ADR 0030](../docs/architecture/adr/0030-scoped-tool-context.md) for the trust boundary and
+See [ADR 0030](architecture/adr/0030-scoped-tool-context.md) for the trust boundary and
 compatibility contract. Context-enabled handlers also receive a cooperative cancellation token;
-see [ADR 0037](../docs/architecture/adr/0037-cooperative-tool-cancellation.md). A synchronous handler
+see [ADR 0037](architecture/adr/0037-cooperative-tool-cancellation.md). A synchronous handler
 can wait on `gabby.cancellation.wait(timeout)` from its worker thread. Handlers that ignore the
 signal may continue after the run returns, so use container-backed tools when forced termination
 is required.
@@ -787,7 +787,7 @@ to their respective rerank APIs, read `COHERE_API_KEY`, `JINA_API_KEY`, `NVIDIA_
 host environment by default, preserve local source metadata by mapping validated indexes, and
 enforce HTTPS for remote endpoints plus 4 MiB request/response caps. Voyage defaults to provider-side
 truncation disabled. Candidate text leaves Gabby when any hosted adapter is used. See [the extension
-guide](../docs/EXTENSIONS.md), [Cohere's rerank API reference](https://docs.cohere.com/v2/reference/rerank),
+guide](EXTENSIONS.md), [Cohere's rerank API reference](https://docs.cohere.com/v2/reference/rerank),
 [Jina's reranker API](https://jina.ai/en-US/reranker/), and
 [Voyage's reranker API reference](https://docs.voyageai.com/reference/reranker-api), and
 [NVIDIA's reranking API reference](https://docs.api.nvidia.com/nim/reference/nvidia-nim-rerankqa-mistral-4b-v3-infer). Opt-in live acceptance checks are available for Cohere, Jina, Voyage, and NVIDIA; they verify provider request and identity mapping, not ranking quality. Gabby does not select an embedding model.
@@ -1165,12 +1165,12 @@ app = create_app(
 )
 ```
 
-For a containerized single-tenant service, see the [Docker Compose deployment reference](../docs/DEPLOYMENT_CONTAINER.md).
+For a containerized single-tenant service, see the [Docker Compose deployment reference](DEPLOYMENT_CONTAINER.md).
 It builds the bundled research agent from the lockfile, binds the service to loopback, and applies
 container resource and filesystem limits. Treat it as a starting point and set deployment-owned
 image digests, credentials, ingress, and operational controls before exposing a service.
 For a Kubernetes reference with a ClusterIP service, NGINX TLS ingress, pod security context, resource
-bounds, and NetworkPolicy, see [the Kubernetes deployment guide](../docs/DEPLOYMENT_KUBERNETES.md).
+bounds, and NetworkPolicy, see [the Kubernetes deployment guide](DEPLOYMENT_KUBERNETES.md).
 
 For deployments issuing signed JWT access tokens, install with
 `python -m pip install 'gabby-ai[auth]'`, then configure an issuer and audience. The

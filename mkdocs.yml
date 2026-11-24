@@ -8,7 +8,8 @@ site_dir: site
 
 theme:
   name: material
-  logo: https://undreamt.in/assets/aistudio/logo_babccb65.png
+  logo: assets/gabby-logo.svg
+  favicon: assets/gabby-logo.svg
   font:
     text: Plus Jakarta Sans
     code: JetBrains Mono
@@ -18,6 +19,8 @@ theme:
     - navigation.tabs
     - navigation.sections
     - navigation.top
+    - navigation.footer
+    - toc.follow
     - search.suggest
     - search.highlight
     - content.code.copy
@@ -44,6 +47,7 @@ markdown_extensions:
   - attr_list
   - def_list
   - footnotes
+  - md_in_html
   - tables
   - toc:
       permalink: true
