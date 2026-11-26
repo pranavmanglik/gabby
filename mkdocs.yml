@@ -8,8 +8,8 @@ site_dir: site/gabby
 
 theme:
   name: material
-  logo: assets/gabby-logo.svg
-  favicon: assets/gabby-logo.svg
+  logo: assets/logo/svg/LOGO-NO-FILL.svg
+  favicon: assets/logo/svg/LOGO-NO-FILL.svg
   font:
     text: Plus Jakarta Sans
     code: JetBrains Mono
@@ -71,7 +71,8 @@ extra:
   generator: false
 
 nav:
-  - Home: index.md
+  - Home:
+      - Hello World!: index.md
   - Start here:
       - User guide: README_GUIDE.md
       - HTTP client: CLIENT.md
